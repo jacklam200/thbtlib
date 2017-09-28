@@ -61,6 +61,9 @@ public class BtService {
     }
 
     public void reset(){
+	    if(mBluetoothAdapter != null){
+            mBluetoothAdapter.cancelDiscovery();
+        }
         mCurrentState = BtState.BT_STATE_UNSUPPORT;
         mLastState = BtState.BT_STATE_UNSUPPORT;
     }
@@ -149,12 +152,15 @@ public class BtService {
             if (null != adapter) {
 
                 Set<BluetoothDevice> deviceSet = adapter.getBondedDevices();
-                if (null != deviceSet) {
+                if (null != deviceSet && deviceSet.size() > 0) {
 
 //                    callBack(BtState.BT_STATE_BINDING, "", "");
                     if(mListener != null){
                         mListener.onBtDevice(deviceSet);
                     }
+                }
+                else{
+                    adapter.startDiscovery();
                 }
             }
         }
