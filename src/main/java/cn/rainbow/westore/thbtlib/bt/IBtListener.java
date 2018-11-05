@@ -13,8 +13,8 @@ public interface IBtListener {
     void onBtMessage(BtState state, String name, String address);
 
     /**
-     *  只有在unbind的时候才会回调
+     *  回调设备
      * @param deviceSet
      */
-    void onBtDevice(Set<BluetoothDevice> deviceSet);
+    void onBtDevice(Set<BluetoothDevice> deviceSet, boolean isPair);
 }

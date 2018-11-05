@@ -43,6 +43,7 @@ public class BtPrintClient {
     private int mState;
 
     private String deviceAddr ="";
+    private String deviceName="";
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -135,6 +136,7 @@ public class BtPrintClient {
     public synchronized void connect(BluetoothDevice device, boolean secure) {
         Log.d(TAG, "connect to: " + device);
         deviceAddr = "";
+        deviceName ="";
         // Cancel any thread attempting to make a connection
         if (mState == STATE_CONNECTING) {
             if (mConnectThread != null) {
@@ -192,6 +194,7 @@ public class BtPrintClient {
         mConnectedThread = new ConnectedThread(socket, socketType);
         setState(STATE_CONNECTED);
         mConnectedThread.start();
+        deviceName = device.getName();
         deviceAddr = device.getAddress();
         // Send the name of the connected device back to the UI Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_DEVICE_NAME);
@@ -209,6 +212,7 @@ public class BtPrintClient {
     public synchronized void stop() {
         Log.d(TAG, "stop");
         deviceAddr = "";
+        deviceName="";
         if (mConnectThread != null) {
             mConnectThread.cancel();
             mConnectThread = null;
@@ -255,6 +259,17 @@ public class BtPrintClient {
 
         if (mState == STATE_CONNECTED){
             address = deviceAddr;
+        }
+
+        return address;
+    }
+
+    public String getDeviceName() {
+
+        String address = "";
+
+        if (mState == STATE_CONNECTED){
+            address = deviceName;
         }
 
         return address;
@@ -421,6 +436,8 @@ public class BtPrintClient {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
                 mmSocket.connect();
+                Log.i(TAG, "connect:" + mSocketType);
+
             } catch (IOException e) {
                 // Close the socket
                 try {
@@ -429,6 +446,7 @@ public class BtPrintClient {
                     Log.e(TAG, "unable to close() " + mSocketType +
                             " socket during connection failure", e2);
                 }
+                Log.i(TAG, "connectionFailed:" + mSocketType);
                 connectionFailed();
                 return;
             }

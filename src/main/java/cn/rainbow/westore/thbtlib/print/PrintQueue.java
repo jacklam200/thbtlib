@@ -19,6 +19,7 @@ public class PrintQueue {
 
     public static interface IPrintListener{
         void onPrintConnectMessage(int connectResult, int result);
+
     }
 
     private boolean mIsConnecting = false;
@@ -57,6 +58,11 @@ public class PrintQueue {
             mListener = listener;
 
         print(context);
+    }
+
+
+    public void setListener(IPrintListener listener){
+        mListener = listener;
     }
 
     /**
@@ -121,6 +127,18 @@ public class PrintQueue {
         if(mBtService != null &&
                 (mBtService.getState() == BtPrintClient.STATE_CONNECTED || mBtService.getState() == BtPrintClient.STATE_CONNECTING)){
             addr = mBtService.getDevice();
+        }
+
+        return addr;
+    }
+
+    public String getDeviceName(){
+
+        String addr = "";
+
+        if(mBtService != null &&
+                (mBtService.getState() == BtPrintClient.STATE_CONNECTED || mBtService.getState() == BtPrintClient.STATE_CONNECTING)){
+            addr = mBtService.getDeviceName();
         }
 
         return addr;

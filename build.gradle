@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion  rootProject.ext.compileSdkVersion
+    buildToolsVersion  rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 8
@@ -24,6 +24,20 @@ android {
     }
 
     buildTypes {
+        debug {
+            jniDebuggable true
+            debuggable true
+            minifyEnabled false
+//            signingConfig signingConfigs.debug
+        }
+
+        stage {
+            zipAlignEnabled true
+            minifyEnabled true
+//            signingConfig signingConfigs.release
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             zipAlignEnabled true
             minifyEnabled true
@@ -41,5 +55,5 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.1.1'
+    provided 'com.android.support:appcompat-v7:24.1.1'
 }

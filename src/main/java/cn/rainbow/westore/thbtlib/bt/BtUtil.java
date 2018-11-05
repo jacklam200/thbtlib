@@ -13,7 +13,7 @@ public class BtUtil {
     /**
      * 判断蓝牙是否打开
      *
-     * @return boolean
+     * @return booleanre
      */
     public static boolean isOpen(BluetoothAdapter adapter) {
         if (null != adapter) {

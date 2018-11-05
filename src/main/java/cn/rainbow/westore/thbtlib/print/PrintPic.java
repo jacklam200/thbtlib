@@ -23,7 +23,7 @@ public class PrintPic {
 
     public byte[] bitbuf = null;
 
-    private PrintPic() {
+    public PrintPic() {
     }
 
     private static PrintPic instance = new PrintPic();
@@ -48,8 +48,31 @@ public class PrintPic {
         }
     }
 
+    public void init(Bitmap bitmap, int width, int height) {
+        if (null != bitmap) {
+            initCanvas(width, height);
+        }
+        if (null == paint) {
+            initPaint();
+        }
+        if (null != bitmap) {
+            drawImage(0, 0, bitmap);
+        }
+    }
+
     public void initCanvas(int w) {
         int h = 10 * w;
+
+        this.bm = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
+        this.canvas = new Canvas(this.bm);
+
+        this.canvas.drawColor(-1);
+        this.width = w;
+        this.bitbuf = new byte[this.width / 8];
+    }
+
+    public void initCanvas(int w, int height) {
+        int h = height;
 
         this.bm = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
         this.canvas = new Canvas(this.bm);
