@@ -1,59 +1,8 @@
-apply plugin: 'com.android.library'
+println isDebug.toBoolean()
 
-android {
-    compileSdkVersion  rootProject.ext.compileSdkVersion
-    buildToolsVersion  rootProject.ext.buildToolsVersion
-
-    defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
-    }
-
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
-
-    buildTypes {
-        debug {
-            jniDebuggable true
-            debuggable true
-            minifyEnabled false
-//            signingConfig signingConfigs.debug
-        }
-
-        stage {
-            zipAlignEnabled true
-            minifyEnabled true
-//            signingConfig signingConfigs.release
-            debuggable false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release {
-            zipAlignEnabled true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+if (isDebug.toBoolean()) {
+    apply from:"build_debug.gradle"
 }
-
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    provided 'com.android.support:appcompat-v7:24.1.1'
+else{
+    apply from:"build_release.gradle"
 }

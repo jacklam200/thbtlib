@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion Integer.parseInt(COMPILE_SDK_VERSION)
+    buildToolsVersion BUILD_TOOLS_VERSION
+
+
+    defaultConfig {
+        minSdkVersion Integer.parseInt(MIN_SDK_VERSION)
+        targetSdkVersion Integer.parseInt(TARGET_SDK_VERSION)
+        versionCode Integer.parseInt(VERSIONCODE)
+        versionName VERSIONNAME
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    lintOptions {
+        abortOnError ABORT_ON_LINT_ERROR.toBoolean()
+        checkReleaseBuilds CHECK_LINT_RELEASE.toBoolean()
+        quiet true
+        ignoreWarnings true
+        // Some libraries have issues with this.
+        disable 'InvalidPackage'
+        // Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'OldTargetApi'
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    sourceSets{
+        main{
+            jniLibs.srcDirs +=['libs']
+            res.srcDirs +=['demo/main/res', 'src/main/res']
+            java.srcDirs += ['demo/main/java','src/main/java']
+            manifest.srcFile 'demo/main/AndroidManifest.xml'
+        }
+    }
+
+    buildTypes {
+        debug {
+            jniDebuggable true
+            debuggable true
+            minifyEnabled false
+//            signingConfig signingConfigs.debug
+        }
+
+        stage {
+            zipAlignEnabled true
+            minifyEnabled true
+//            signingConfig signingConfigs.release
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            zipAlignEnabled true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$APPCOMPAT_V7_VERSION"
+    testImplementation "junit:junit:$JUNIT_VERSION"
+
+}

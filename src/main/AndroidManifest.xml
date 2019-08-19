@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.rainbow.westore.thbtlib">
+    package="com.lingzhi.retail.btlib">
 
     <!-- 允许程序连接到已配对的蓝牙设备 -->
     <uses-permission android:name="android.permission.BLUETOOTH"/>
